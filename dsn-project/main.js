@@ -19,10 +19,12 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.physicallyCorrectLights = true;
 document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.SphereGeometry(5, 10, 10);
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-const mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
+let sphereMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(5, 10, 10),
+  new THREE.MeshBasicMaterial({ color: 0xff0000 })
+);
+
+scene.add(sphereMesh);
 
 (async function () {
   renderer.setAnimationLoop(() => {
