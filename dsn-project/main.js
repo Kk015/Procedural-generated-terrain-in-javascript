@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { BoxGeometry, CylinderBufferGeometry, Vector2 } from "three";
 import * as STBLIB from "three-stdlib";
 import { mergeBufferAttributes, mergeBufferGeometries } from "three-stdlib";
+import * as SIMPLEX from "simplex-noise";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color("#FFEECC");
@@ -12,7 +13,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(0, 0, 50);
+camera.position.set(-17, 31, 33);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -27,6 +28,7 @@ controls.damagingFactor = 0.05;
 controls.enableDamping = true;
 
 let envmap;
+const MAX_HEIGHT = 10;
 
 (async function () {
   let pmrem = new THREE.PMREMGenerator(renderer);
@@ -35,11 +37,14 @@ let envmap;
     .loadAsync("/envmap.hdr");
   envmap = pmrem.fromEquirectangular(envmapTexture).texture;
 
+  const simplex = new SIMPLEX.createNoise2D();
   for (let i = -10; i <= 20; i++) {
     for (let j = -10; j <= 20; j++) {
       let position = tileToPosition(i, j);
       if (position.length() > 16) continue;
-      makeHex(3, position);
+      let noise = (simplex(i * 0.1, j * 0.1) + 1) * 0.5;
+      noise = Math.pow(noise, 1.5);
+      makeHex(noise * MAX_HEIGHT, position);
     }
   }
 
