@@ -37,7 +37,9 @@ let envmap;
 
   for (let i = -10; i <= 20; i++) {
     for (let j = -10; j <= 20; j++) {
-      makeHex(3, tileToPosition(i, j));
+      let position = tileToPosition(i, j);
+      if (position.length() > 16) continue;
+      makeHex(3, position);
     }
   }
 
