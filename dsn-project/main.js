@@ -35,7 +35,12 @@ let envmap;
     .loadAsync("/envmap.hdr");
   envmap = pmrem.fromEquirectangular(envmapTexture).texture;
 
-  makeHex(3, new THREE.Vector2(0, 0));
+  for (let i = -10; i <= 20; i++) {
+    for (let j = -10; j <= 20; j++) {
+      makeHex(3, tileToPosition(i, j));
+    }
+  }
+
   let hexagonMesh = new THREE.Mesh(
     hexagonGeometries,
     new THREE.MeshStandardMaterial({
@@ -50,6 +55,10 @@ let envmap;
     renderer.render(scene, camera);
   });
 })();
+
+function tileToPosition(tileX, tileY) {
+  return new Vector2((tileX + (tileY % 2) * 0.5) * 1.77, tileY * 1.535);
+}
 
 let hexagonGeometries = new THREE.BoxGeometry(0, 0, 0);
 
